@@ -15,13 +15,14 @@ def generate_tokens(request):
     """generating auth tokens using auth code """
     payload = f"""code={request.headers.get("code")}&\
                 grant_type=authorization_code&\
-                client_id={config("CLIENT_ID")}&\
-                client_secret={config("CLIENT_SECRET")}&\
+                client_id={config("CLIENT_ID_HUBSPOT")}&\
+                client_secret={config("CLIENT_SECRET_HUBSPOT")}&\
                 redirect_uri={config("REDIRECT_URI")}""".replace(" ", "")
     tokens = requests.request(
         method="POST",
         url=TOKEN_URL,
         headers=HEADERS,
         data=payload,
+        timeout=20,
     )
     return tokens.json()
