@@ -28,6 +28,7 @@ def ping():
 @cross_origin()
 def auth_url():
     """creating auth url for authentication """
+    print(AUTH_URL)
     return json.dumps({
         "status": status.HTTP_200_OK,
         "data": [AUTH_URL, ],
