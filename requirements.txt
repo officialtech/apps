@@ -7,3 +7,4 @@ Flask-api
 mysql-connector-python
 Python-Decouple
 Requests
+Autopep8

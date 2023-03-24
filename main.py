@@ -10,6 +10,8 @@ from apps.gc.constant import AUTH_URL
 from apps.gc.db import connect
 
 from apps.hubspot.main_handler import generate_tokens, create_auth_url
+from apps.slack.constant import AUTH_URL_SLACK
+from apps.slack.main_handler import get_access_token
 
 
 app = Flask(__name__)
@@ -79,5 +81,31 @@ def credentials():
 ############################################# HUBSPOT ^ ####################################################
 
 
+##################################### Slack start ########################################
+
+@app.route(rule="/get/slack/url/", methods=["GET", ])
+@cross_origin()
+def auth_url_slack():
+    """get auth url of slack """
+    return json.dumps({
+        "url": AUTH_URL_SLACK.strip(),
+        "status": status.HTTP_200_OK,
+        "message": "open url and try to authenticate with Slack",
+    })
+
+@app.route(rule="/post/slack/code/", methods=["POST", ])
+@cross_origin()
+def get_access_token_slack():
+    """get access token using code """
+
+    _code = eval(request.data).get("code")
+    response = get_access_token(code=_code)
+    return response
+
+
+##################################### Slack end ########################################
+
+
 if __name__ == '__main__':
-    app.run()
+    from decouple import config
+    app.run(debug=config("FLASK_DEBUG", cast=bool, default=False), )

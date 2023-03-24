@@ -12,3 +12,16 @@
     - A user preference from the Calendar UI, such as the user's time zone. A single user preference is represented by a Setting Resource.
 ## [ACL]("https://developers.google.com/calendar/v3/reference/acl")
 - An access control rule granting a user (or a group of users) a specified level of access to a calendar. A single access control rule is represented by an ACL resource.
+
+
+
+
+
+
+
+
+
+
+# Slack
+- [Redirect URL and other settings]("https://api.slack.com/apps/A04VBLHJD43/oauth?")
+- [Scopes]("https://api.slack.com/scopes")
