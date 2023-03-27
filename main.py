@@ -11,7 +11,7 @@ from apps.gc.db import connect
 
 from apps.hubspot.main_handler import generate_tokens, create_auth_url
 from apps.slack.constant import AUTH_URL_SLACK
-from apps.slack.main_handler import get_access_token
+from apps.slack.main_handler import get_access_token, get_conversation_list, send_message_to_channel
 
 
 app = Flask(__name__)
@@ -101,6 +101,25 @@ def get_access_token_slack():
     _code = eval(request.data).get("code")
     response = get_access_token(code=_code)
     return response
+
+
+@app.route(rule="/get/slack/channels/", methods=["GET", ])
+@cross_origin()
+def get_all_channels():
+    """list of all channels in workspace """
+    _access_token = request.headers.get("access_token")
+    return get_conversation_list(access_token=_access_token)
+
+
+@app.route(rule="/post/slack/message/", methods=["POST", ])
+@cross_origin()
+def send_message():
+    """send message to particular channel of given workspace """
+    _access_token = request.headers.get("access_token")
+    _body = eval(request.data)
+    _channel_id = _body.get("channel")
+    text = _body.get("text")
+    return send_message_to_channel(channel_id=_channel_id, message=text, access_token=_access_token)
 
 
 ##################################### Slack end ########################################

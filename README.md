@@ -25,3 +25,4 @@
 # Slack
 - [Redirect URL and other settings](https://api.slack.com/apps/A04VBLHJD43/oauth?)
 - [Scopes](https://api.slack.com/scopes)
+- [Rotate token](https://api.slack.com/authentication/config-tokens#rotating)
