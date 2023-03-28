@@ -26,3 +26,9 @@
 - [Redirect URL and other settings](https://api.slack.com/apps/A04VBLHJD43/oauth?)
 - [Scopes](https://api.slack.com/scopes)
 - [Rotate token](https://api.slack.com/authentication/config-tokens#rotating)
+
+
+# Salesforce
+- [app](https://d2w00000rprvceab-dev-ed.develop.lightning.force.com/lightning/setup/ConnectedApplication/page?address=%2Fapp%2Fmgmt%2Fforceconnectedapps%2FforceAppDetail.apexp%3FapplicationId%3D06P2w000000OsY8%26notify%3Dtrue%26sfdcIFrameOrigin%3Dhttps%253A%252F%252Fd2w00000rprvceab-dev-ed.develop.lightning.force.com%26clc%3D1%26appLayout%3Dsetup%26tour%3D%26sfdcIFrameHost%3Dweb%26nonce%3D11cf4ffc434ad52c08c4ce5ceb8c4c02007391e7a74cb4aa73c6c19b2a8a6adb%26ltn_app_id%3D06m2w000005LaJcAAK%26id%3D0Ci2w00000008TQ)
+- [api](https://developer.salesforce.com/docs/apis)
+- [about scopes](https://help.salesforce.com/s/articleView?id=sf.connected_app_create_api_integration.htm&type=5)

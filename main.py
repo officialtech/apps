@@ -12,6 +12,7 @@ from apps.gc.db import connect
 from apps.hubspot.main_handler import generate_tokens, create_auth_url
 from apps.slack.constant import AUTH_URL_SLACK
 from apps.slack.main_handler import get_access_token, get_conversation_list, send_message_to_channel
+from apps.salesforce.main_handler import get_auth_url, get_oauth_tokens
 
 
 app = Flask(__name__)
@@ -115,14 +116,44 @@ def get_all_channels():
 @cross_origin()
 def send_message():
     """send message to particular channel of given workspace """
+    CHANNEL_ID = ""
     _access_token = request.headers.get("access_token")
     _body = eval(request.data)
-    _channel_id = _body.get("channel")
+    _channel_id = _body.get("channel", CHANNEL_ID)
     text = _body.get("text")
     return send_message_to_channel(channel_id=_channel_id, message=text, access_token=_access_token)
 
 
 ##################################### Slack end ########################################
+
+
+#########################################################################################
+#
+#   Salesforce start
+#
+#########################################################################################
+
+@app.route(rule="/get/sf/url/", methods=["GET", ])
+@cross_origin()
+def get_oauth_url():
+    """get SF oAuth URL """
+    return get_auth_url()
+
+
+@app.route(rule="/post/sf/code/", methods=["POST", ])
+@cross_origin()
+def oauth_token():
+    """fetch tokens using oauth code """
+    _code = request.headers.get("code")
+    return get_oauth_tokens(code=_code)
+
+
+
+#########################################################################################
+#
+#   Salesforce end
+#
+#########################################################################################
 
 
 if __name__ == '__main__':

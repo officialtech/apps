@@ -4,3 +4,4 @@ venv/
 token.json
 Google Calander*
 .vscode/
+*.json
