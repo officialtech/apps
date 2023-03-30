@@ -105,8 +105,8 @@ def get_event_handler(request):
     try:
       return client.events().list(
           calendarId="primary",
-          timeMin=request.args.get("date_utc")+"T00:00:00.000Z" if request.args.get("date_utc") else now,
-          timeMax=request.args.get("date_utc")+"T23:59:59.000Z" if request.args.get("date_utc") else now,
+          timeMin=request.headers.get("date_utc")+"T00:00:00.000Z" if request.headers.get("date_utc") else now,
+          timeMax=request.headers.get("date_utc")+"T23:59:59.000Z" if request.args.get("date_utc") else now,
           
       ).execute()
     
@@ -116,7 +116,7 @@ def get_event_handler(request):
         client = create_client_service(access_token=tokens.get("access_token"), refresh_token=request.headers.get("refresh_token"))
         return client.events().list(
             calendarId="primary",
-            timeMin=request.args.get("date_utc")+"T00:00:00.00Z" if request.args.get("date_utc") else now,
-            timeMax=request.args.get("date_utc")+"T23:59:59.000Z" if request.args.get("date_utc") else now,
+            timeMin=request.headers.get("date_utc")+"T00:00:00.00Z" if request.headers.get("date_utc") else now,
+            timeMax=request.headers.get("date_utc")+"T23:59:59.000Z" if request.headers.get("date_utc") else now,
             
           ).execute()

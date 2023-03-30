@@ -94,12 +94,12 @@ def auth_url_slack():
         "message": "open url and try to authenticate with Slack",
     })
 
-@app.route(rule="/post/slack/code/", methods=["POST", ])
+@app.route(rule="/post/slack/code/", methods=["GET", ])
 @cross_origin()
 def get_access_token_slack():
     """get access token using code """
 
-    _code = eval(request.data).get("code")
+    _code = request.headers.get("code")
     response = get_access_token(code=_code)
     return response
 
@@ -140,7 +140,7 @@ def get_oauth_url():
     return get_auth_url()
 
 
-@app.route(rule="/post/sf/code/", methods=["POST", ])
+@app.route(rule="/post/sf/code/", methods=["GET", ])
 @cross_origin()
 def oauth_token():
     """fetch tokens using oauth code """
