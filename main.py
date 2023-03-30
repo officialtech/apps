@@ -34,7 +34,7 @@ def auth_url():
     print(AUTH_URL)
     return json.dumps({
         "status": status.HTTP_200_OK,
-        "data": [AUTH_URL, ],
+        "url": AUTH_URL,
     })
 
 @app.route("/code/", methods=["GET", ])

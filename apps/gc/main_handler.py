@@ -62,6 +62,7 @@ def code_handler(request):
     profile = user_profile(access_token=response.get("access_token"))
     response["user_id"] = profile.get("id")
     response["email"] = profile.get("email")
+    response["status"] = 200
     # save_creds(response)
     return response
     

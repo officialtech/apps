@@ -1,6 +1,6 @@
 """Main module request handler """
 
-import requests
+import requests, json
 from decouple import config
 
 from apps.hubspot.constants import TOKEN_URL, HEADERS
@@ -9,7 +9,10 @@ from apps.hubspot.auth import AUTH_URI
 
 def create_auth_url():
     """generating auth url of Hubspot """
-    return AUTH_URI
+    return json.dumps({
+        "status": 200,
+        "url": AUTH_URI
+    })
 
 def generate_tokens(request):
     """generating auth tokens using auth code """
