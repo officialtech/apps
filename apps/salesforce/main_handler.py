@@ -30,3 +30,31 @@ def get_oauth_tokens(code: str):
     print(response.text)
 
     return response.json()
+
+
+
+def get_schemas(schema):
+    """get schemas for given type """
+
+    if schema == "contact":
+        from apps.salesforce.contact import contact_schema
+        return contact_schema()
+
+
+    elif schema == "opportunity":
+        from apps.salesforce.opportunity import oppertunity_schema
+        return oppertunity_schema()
+
+    elif schema == "lead":
+        from apps.salesforce.lead import lead_schema
+        return lead_schema()
+
+    elif schema == "account":
+        from apps.salesforce.account import account_schema
+        return account_schema()
+
+    else:
+        return json.dumps({
+            "schema": [],
+            "message": "invalid schmea type",
+        })

@@ -12,7 +12,7 @@ from apps.gc.db import connect
 from apps.hubspot.main_handler import generate_tokens, create_auth_url
 from apps.slack.constant import AUTH_URL_SLACK
 from apps.slack.main_handler import get_access_token, get_conversation_list, send_message_to_channel
-from apps.salesforce.main_handler import get_auth_url, get_oauth_tokens
+from apps.salesforce.main_handler import get_auth_url, get_oauth_tokens, get_schemas
 
 
 app = Flask(__name__)
@@ -146,6 +146,14 @@ def oauth_token():
     """fetch tokens using oauth code """
     _code = request.headers.get("code")
     return get_oauth_tokens(code=_code)
+
+
+@app.route(rule="/get/sf/schema/", methods=["GET", ])
+@cross_origin()
+def get_schema_main():
+    """get SF schemas """
+    schema_type = request.headers.get("schema")
+    return get_schemas(schema=schema_type)
 
 
 
