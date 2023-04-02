@@ -19,7 +19,7 @@ def get_request_google(url, payload):
         headers=headers,
         timeout=10,
     )
-    return response.json()
+    return response.json(), response.status_code
 
 def regenerate_access_token(refresh_token, url=TOKEN_URL, client_id=None, client_secret=None, grant_type="refresh_token"):
     """regenerating access token using refresh token """

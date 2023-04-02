@@ -12,12 +12,21 @@ from apps.gc.db import connect
 from apps.hubspot.main_handler import generate_tokens, create_auth_url
 from apps.slack.constant import AUTH_URL_SLACK
 from apps.slack.main_handler import get_access_token, get_conversation_list, send_message_to_channel
-from apps.salesforce.main_handler import get_auth_url, get_oauth_tokens, get_schemas
+from apps.salesforce.main_handler import (
+    get_auth_url, get_oauth_tokens, get_schemas, fetch_user_details
+    )
+from apps.salesforce.lead import fetch_lead_data
+from apps.salesforce.user_team_member import fetch_user_team_member
 
 
 app = Flask(__name__)
 
-################################## APIs GC ########################################################
+
+#########################################################################################
+#
+#   Google Calander start
+#
+#########################################################################################
 
 @app.route(rule="/ping/", methods=["GET", ])
 @cross_origin()
@@ -63,9 +72,19 @@ def get_event():
     return get_event_handler(request=request)
 
 
-################################ APIs GC ^ ##############################################################
+#########################################################################################
+#
+#   google Calander end
+#
+#########################################################################################
 
-########################################## HUBSPOT #######################################################
+
+
+#########################################################################################
+#
+#   Hubspot start
+#
+#########################################################################################
 
 @app.route(rule="/get/hs/url/", methods=["GET", ])
 @cross_origin()
@@ -79,10 +98,21 @@ def credentials():
     """exchange authorization code for tokens """
     return generate_tokens(request)
 
-############################################# HUBSPOT ^ ####################################################
+
+#########################################################################################
+#
+#   Hubspot end
+#
+#########################################################################################
 
 
-##################################### Slack start ########################################
+
+
+#########################################################################################
+#
+#   Slack start
+#
+#########################################################################################
 
 @app.route(rule="/get/slack/url/", methods=["GET", ])
 @cross_origin()
@@ -124,7 +154,13 @@ def send_message():
     return send_message_to_channel(channel_id=_channel_id, message=text, access_token=_access_token)
 
 
-##################################### Slack end ########################################
+#########################################################################################
+#
+#   Slack end
+#
+#########################################################################################
+
+
 
 
 #########################################################################################
@@ -155,6 +191,31 @@ def get_schema_main():
     schema_type = request.headers.get("schema")
     return get_schemas(schema=schema_type)
 
+
+@app.route(rule="/get/sf/profile/", methods=["GET", ])
+@cross_origin()
+def fetch_profile_details():
+    """fetch user profile details """
+    _access_token = request.headers.get("access_token", "if empty")
+    return fetch_user_details(access_token=_access_token, )
+
+
+@app.route(rule="/get/sf/lead/data", methods=["GET", ])
+@cross_origin()
+def get_sf_lead_data():
+    """fetch lead data """
+    _access_token = request.headers.get("access_token", "if empty")
+    _instance_url = request.headers.get("instance_url", "if empty")
+    return fetch_lead_data(instance_url=_instance_url, access_token=_access_token, )
+
+
+@app.route(rule="/get/sf/userTeamMember/", methods=["GET", ])
+@cross_origin()
+def user_team_member_main():
+    """fetch user team member """
+    _access_token = request.headers.get("access_token", "if empty")
+    _instance_url = request.headers.get("instance_url", "if empty")
+    return fetch_user_team_member(instance_url=_instance_url, access_token=_access_token, )
 
 
 #########################################################################################

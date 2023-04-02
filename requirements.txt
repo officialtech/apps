@@ -8,3 +8,5 @@ mysql-connector-python
 Python-Decouple
 Requests
 Autopep8
+simple-salesforce
+

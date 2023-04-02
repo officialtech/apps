@@ -6,7 +6,7 @@ import uuid
 from decouple import config
 from google.auth.exceptions import RefreshError
 
-from apps.gc.constant import TOKEN_URL, REDIRECT_URL
+from apps.gc.constant import TOKEN_URL
 from apps.gc.db import connect
 from apps.gc.generic import get_request_google, user_profile, regenerate_access_token
 from apps.gc.calander import insert_event, create_client_service
@@ -48,21 +48,22 @@ event = {
 
 def code_handler(request):
     """code handler is used to generate auth tokens and save those token to DB """
+
+    print("Headers: ", request.headers, "Args: ", request.args, "Body: ", request.data)
     code = request.headers.get("code")
-    print(code)
     payload = {
         "code": code,
         "client_id": config('CLIENT_ID'),
         "client_secret": config('CLIENT_SECRET'),
-        "redirect_uri": REDIRECT_URL,
+        "redirect_uri": config('REDIRECT_URL_GOOGLE'),
         "grant_type": "authorization_code",
     }
 
-    response = get_request_google(url=TOKEN_URL, payload=payload)
+    response, status = get_request_google(url=TOKEN_URL, payload=payload)
     profile = user_profile(access_token=response.get("access_token"))
     response["user_id"] = profile.get("id")
     response["email"] = profile.get("email")
-    response["status"] = 200
+    response["status"] = status
     # save_creds(response)
     return response
     
@@ -81,12 +82,16 @@ def save_creds(creds):
 
 def insert_event_handler(request):
     """inserting event """
+
+    print("Headers: ", request.headers, "Args: ", request.args, "Body: ", request.data)
     service = insert_event(access_token=request.json.get("access_token"), refresh_token=request.json.get("refresh_token"), event=request.json.get("event"))
     return service.events().list(calendarId="primary").execute()
 
 
 def get_events_handler(request):
     """get all the events created by user """
+
+    print("Headers: ", request.headers, "Args: ", request.args, "Body: ", request.data)
     client = create_client_service(access_token=request.headers.get("access_token"), refresh_token=request.headers.get("refresh_token"))
     try:
       return client.events().list(calendarId="primary").execute()
@@ -101,6 +106,7 @@ def get_events_handler(request):
 def get_event_handler(request):
     """get all the events created by user """
 
+    print("Headers: ", request.headers, "Args: ", request.args, "Body: ", request.data)
     now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     client = create_client_service(access_token=request.headers.get("access_token"), refresh_token=request.headers.get("refresh_token"))
     try:

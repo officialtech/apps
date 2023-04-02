@@ -6,3 +6,6 @@ Google Calander*
 .vscode/
 *.json
 postman/
+test.py
+.env*
+.flaskenv

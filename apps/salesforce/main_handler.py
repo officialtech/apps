@@ -2,7 +2,12 @@
 
 import json
 import requests
+
 from decouple import config
+
+from apps.salesforce.constant import PROFILE
+from apps.salesforce.db_ops import save_profile
+
 
 def get_auth_url():
     """cooking oauth url for salesforce """
@@ -58,3 +63,24 @@ def get_schemas(schema):
             "schema": [],
             "message": "invalid schmea type",
         })
+
+
+
+def fetch_user_details(access_token, ):
+    """fetching user profile details in SF """
+
+    _headers = {"Authorization": f"Bearer {access_token}"}
+    response = requests.request(
+        method="GET",
+        url=PROFILE,
+        headers=_headers,
+        timeout=10,
+    )
+
+    # save user details to DB
+    save_profile()
+
+    return json.dumps({
+        "status": response.status_code,
+        "data": response.json(),
+    })

@@ -1,5 +1,7 @@
 """all the const related to SF """
 
+PROFILE = """https://login.salesforce.com/services/oauth2/userinfo"""
+
 opportunity_schema_dict = {
     "id": "varchar",
     "is_deleted": "tinyint",
