@@ -1,9 +1,12 @@
 """this module is responsible for make connection to DB """
 
+from urllib.parse import quote_plus 
 from decouple import config
 
 import mysql.connector as mysql
 from mysql.connector import errorcode
+
+from sqlalchemy import create_engine
 
 
 credentials = {
@@ -55,5 +58,20 @@ class MySqlConnection():
         print("Closing connection... ")
         return True
     
+    def cursor(self, ):
+        print("creating cursor...")
+        return self.con.cursor()
+        
 
+class SqlAlchemyConnection():
+    """
+    Establishing Connectivity - the Engine, Every SQLAlchemy
+    application that connects to a database needs to use an `Engine`
+    """
 
+    def __init__(self, credentials=credentials, ) -> None:
+        self.engine = create_engine(
+            f"mysql+mysqldb://{credentials.get('user')}:{credentials.get('password')}@{credentials.get('host')}/{credentials.get('database')}",
+            pool_recycle=3600,
+            echo=True
+        )

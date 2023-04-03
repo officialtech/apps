@@ -16,7 +16,7 @@ from apps.salesforce.main_handler import (
     get_auth_url, get_oauth_tokens, get_schemas, fetch_user_details
     )
 from apps.salesforce.lead import fetch_lead_data
-from apps.salesforce.user_team_member import fetch_user_team_member
+from apps.salesforce.user_ops import fetch_user_team_member, fetch_sf_users
 
 
 app = Flask(__name__)
@@ -216,6 +216,16 @@ def user_team_member_main():
     _access_token = request.headers.get("access_token", "if empty")
     _instance_url = request.headers.get("instance_url", "if empty")
     return fetch_user_team_member(instance_url=_instance_url, access_token=_access_token, )
+
+
+@app.route(rule="/get/sf/users/", methods=["GET", ])
+@cross_origin()
+def sf_users():
+    """fetch SF user data """
+    _access_token = request.headers.get("access_token", "if empty")
+    _instance_url = request.headers.get("instance_url", "if empty")
+    return fetch_sf_users(instance_url=_instance_url, session_id=_access_token, )
+
 
 
 #########################################################################################

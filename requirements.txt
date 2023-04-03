@@ -9,4 +9,6 @@ Python-Decouple
 Requests
 Autopep8
 simple-salesforce
+Pandas
+SQLAlchemy
 

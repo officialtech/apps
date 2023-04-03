@@ -1,0 +1,1 @@
+INSERT INTO `sf_users_raw`(`id`, `name`, `email`, `is_active`, `user_type`) VALUES ({id}, {name}, {email}, {is_active}, {user_type})
