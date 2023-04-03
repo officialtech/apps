@@ -237,4 +237,4 @@ def sf_users():
 
 if __name__ == '__main__':
     from decouple import config
-    app.run(debug=config("FLASK_DEBUG", cast=bool, default=False), )
+    app.run(debug=config("FLASK_DEBUG", cast=bool, default=False), host=config('SERVER_NAME'), port=config('PORT'))
