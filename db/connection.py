@@ -11,6 +11,7 @@ from sqlalchemy import create_engine
 
 credentials = {
   'user': config("DB_USER"),
+  'port': config("DB_PORT"),
   'password': config("DB_PASSWORD"),
   'host': config("DB_HOST"),
   'database': config("DB_NAME"),

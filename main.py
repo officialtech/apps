@@ -13,7 +13,8 @@ from apps.hubspot.main_handler import generate_tokens, create_auth_url
 from apps.slack.constant import AUTH_URL_SLACK
 from apps.slack.main_handler import get_access_token, get_conversation_list, send_message_to_channel
 from apps.salesforce.main_handler import (
-    get_auth_url, get_oauth_tokens, get_schemas, fetch_user_details
+    get_auth_url, get_oauth_tokens, get_schemas, fetch_user_details,
+    fetch_contact_schema, fetch_lead_schema, fetch_account_schema, fetch_opportunity_schema,
     )
 from apps.salesforce.lead import fetch_lead_data
 from apps.salesforce.user_ops import fetch_user_team_member, fetch_sf_users
@@ -226,6 +227,37 @@ def sf_users():
     _instance_url = request.headers.get("instance_url", "if empty")
     return fetch_sf_users(instance_url=_instance_url, session_id=_access_token, )
 
+
+
+@app.route(rule="/get/sf/contact/schema", methods=["GET", ])
+@cross_origin()
+def sf_contact_schema():
+    """fetch SF contact schema """
+    return fetch_contact_schema(request=request)
+
+
+
+@app.route(rule="/get/sf/lead/schema", methods=["GET", ])
+@cross_origin()
+def sf_lead_schema():
+    """fetch SF lead schema """
+    return fetch_lead_schema(request=request)
+
+
+
+@app.route(rule="/get/sf/account/schema", methods=["GET", ])
+@cross_origin()
+def sf_account_schema():
+    """fetch SF account schema """
+    return fetch_account_schema(request=request)
+
+
+
+@app.route(rule="/get/sf/opportunity/schema", methods=["GET", ])
+@cross_origin()
+def sf_opportunity_schema():
+    """fetch SF opportunity schema """
+    return fetch_opportunity_schema(request=request)
 
 
 #########################################################################################

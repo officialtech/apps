@@ -4,7 +4,7 @@ from db.connection import MySqlConnection, SqlAlchemyConnection
 from utils.genric import read_file
 
 
-def connect(engine="sql"):
+def connect(engine="mysql"):
     """return engine type sql connection object """
 
     if engine == "sqlalchemy":
@@ -21,13 +21,13 @@ def save_profile():
 
 def save_users_data(data, ):
     """save users data to DB """
-    cnx = connect(engine="sqlalchemy")
-    # cur = cnx.cursor()
+    cnx = connect(engine="mysql")
+    cur = cnx.cursor()
 
     query = read_file(file="apps/salesforce/sql/insert_user", extention="sql")
     data_list = [tuple(_data.values()) for _data in data]
 
-    # cur.executemany(query, data_list)
-    # cnx.commit()
-    # cnx.close()
+    cur.executemany(query, data_list)
+    cnx.commit()
+    cnx.close()
     return True

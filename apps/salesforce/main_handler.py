@@ -8,6 +8,11 @@ from decouple import config
 from apps.salesforce.constant import PROFILE
 from apps.salesforce.db_ops import save_profile
 
+from apps.salesforce.contact import fetch_sf_contact_schema
+from apps.salesforce.lead import fetch_sf_lead_schema
+from apps.salesforce.account import fetch_sf_account_schema
+from apps.salesforce.opportunity import fetch_sf_opportunity_schema
+
 
 def get_auth_url():
     """cooking oauth url for salesforce """
@@ -84,3 +89,32 @@ def fetch_user_details(access_token, ):
         "status": response.status_code,
         "data": response.json(),
     })
+
+
+def fetch_contact_schema(request, ):
+    """fetch schema of contact from SF """
+    _instance_url = request.headers.get("instance_url", "if empty")
+    _access_token = request.headers.get("access_token", "if empty")
+    return fetch_sf_contact_schema(instance_url=_instance_url, access_id=_access_token)
+
+
+def fetch_lead_schema(request, ):
+    """fetch schema of lead from SF """
+    _instance_url = request.headers.get("instance_url", "if empty")
+    _access_token = request.headers.get("access_token", "if empty")
+    return fetch_sf_lead_schema(instance_url=_instance_url, access_id=_access_token)
+
+
+def fetch_account_schema(request, ):
+    """fetch schema of account from SF """
+    _instance_url = request.headers.get("instance_url", "if empty")
+    _access_token = request.headers.get("access_token", "if empty")
+    return fetch_sf_account_schema(instance_url=_instance_url, access_id=_access_token)
+
+
+def fetch_opportunity_schema(request, ):
+    """fetch schema of opportunity from SF """
+    _instance_url = request.headers.get("instance_url", "if empty")
+    _access_token = request.headers.get("access_token", "if empty")
+    return fetch_sf_opportunity_schema(instance_url=_instance_url, access_id=_access_token)
+

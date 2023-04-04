@@ -55,7 +55,7 @@ def fetch_sf_users(instance_url, session_id, ):
             for objects in users_data['records']
         ]
 
-        save_users_data(data=users, )
+        # save_users_data(data=users, )
 
         return json.dumps({
             "users": users,
@@ -83,7 +83,7 @@ def fetch_sf_users(instance_url, session_id, ):
                 for _users in response.json().get("users")
             ]
 
-            save_users_data(data=users)
+            # save_users_data(data=users, )
 
             return json.dumps({
                 "users": users_rest_data,
