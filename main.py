@@ -19,6 +19,9 @@ from apps.salesforce.main_handler import (
 from apps.salesforce.lead import fetch_lead_data
 from apps.salesforce.user_ops import fetch_user_team_member, fetch_sf_users
 
+# SSO
+from apps.sso.main_handler import SSO_AUTH_URL, sso_code_handler
+
 
 app = Flask(__name__)
 
@@ -229,7 +232,7 @@ def sf_users():
 
 
 
-@app.route(rule="/get/sf/contact/schema", methods=["GET", ])
+@app.route(rule="/get/sf/contact/schema/", methods=["GET", ])
 @cross_origin()
 def sf_contact_schema():
     """fetch SF contact schema """
@@ -237,7 +240,7 @@ def sf_contact_schema():
 
 
 
-@app.route(rule="/get/sf/lead/schema", methods=["GET", ])
+@app.route(rule="/get/sf/lead/schema/", methods=["GET", ])
 @cross_origin()
 def sf_lead_schema():
     """fetch SF lead schema """
@@ -245,7 +248,7 @@ def sf_lead_schema():
 
 
 
-@app.route(rule="/get/sf/account/schema", methods=["GET", ])
+@app.route(rule="/get/sf/account/schema/", methods=["GET", ])
 @cross_origin()
 def sf_account_schema():
     """fetch SF account schema """
@@ -253,7 +256,7 @@ def sf_account_schema():
 
 
 
-@app.route(rule="/get/sf/opportunity/schema", methods=["GET", ])
+@app.route(rule="/get/sf/opportunity/schema/", methods=["GET", ])
 @cross_origin()
 def sf_opportunity_schema():
     """fetch SF opportunity schema """
@@ -265,6 +268,45 @@ def sf_opportunity_schema():
 #   Salesforce end
 #
 #########################################################################################
+
+
+
+
+
+#########################################################################################
+#
+#   Google SSO start
+#
+#########################################################################################
+
+
+@app.route(rule="/get/google/sso/url/", methods=["GET", ])
+@cross_origin()
+def get_sso_auth_url():
+    """get sso oauth url """
+    return json.dumps({
+        "url": SSO_AUTH_URL,
+    })
+
+
+@app.route("/get/google/sso/code/", methods=["GET", ])
+@cross_origin()
+def oauth_code():
+    """fetching credentials using oauth code """
+    return sso_code_handler(request=request)
+
+
+
+
+
+
+#########################################################################################
+#
+#   Google SSO end
+#
+#########################################################################################
+
+
 
 
 if __name__ == '__main__':

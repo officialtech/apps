@@ -65,12 +65,11 @@ def fetch_sf_users(instance_url, session_id, ):
         print(f"exception occured: {sfer}")
 
         try:
-            url = "https://cifoundation.my.salesforce.com/services/data/v57.0/chatter/users"
             payload={}
             headers = {
                 'Authorization': f'Bearer {session_id}',
             }
-            response = requests.request("GET", url, headers=headers, data=payload, timeout=10)
+            response = requests.request("GET", instance_url, headers=headers, data=payload, timeout=10)
             print(response.text)
             users_rest_data = [
                 {
