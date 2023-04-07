@@ -69,7 +69,7 @@ def fetch_sf_users(instance_url, session_id, ):
             headers = {
                 'Authorization': f'Bearer {session_id}',
             }
-            response = requests.request("GET", instance_url, headers=headers, data=payload, timeout=10)
+            response = requests.request("GET", f"""{instance_url}/services/data/v57.0/chatter/users""", headers=headers, data=payload, timeout=10)
             print(response.text)
             users_rest_data = [
                 {
@@ -86,8 +86,12 @@ def fetch_sf_users(instance_url, session_id, ):
 
             return json.dumps({
                 "users": users_rest_data,
+                "status": response.status_code,
             })
 
         except Exception as ex:
             print(f"exception in except block: {ex}")
-            pass
+            return json.dumps({
+                "message": f"Please check your access_token and instance_url, Detail study: {ex}",
+                "status": response.status_code,
+            })
