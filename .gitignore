@@ -9,3 +9,5 @@ postman/
 test.py
 .env*
 .flaskenv
+*.pem
+.vscode

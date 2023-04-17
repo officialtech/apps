@@ -27,3 +27,15 @@ def sso_code_handler(request):
     response["email"] = profile.get("email")
     response["status"] = status
     return response
+
+
+
+##########################################################################################
+#
+#   GOOGLE ADMIN WORKSPACE SSO
+#
+##########################################################################################
+
+SSO_URL = """https://accounts.google.com/o/saml2/idp?idpid=C02qk8qs1"""
+ENTITY_ID = """https://accounts.google.com/o/saml2?idpid=C02qk8qs1"""
+SHA256FINGERPRINT = """4B:C5:56:EE:43:97:05:B1:91:4E:B3:2F:14:F3:F4:80:B1:BF:80:71:66:ED:8A:0A:8E:AB:FA:AD:2E:1F:58:33"""

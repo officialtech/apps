@@ -15,6 +15,7 @@ from apps.slack.main_handler import get_access_token, get_conversation_list, sen
 from apps.salesforce.main_handler import (
     get_auth_url, get_oauth_tokens, get_schemas, fetch_user_details,
     fetch_contact_schema, fetch_lead_schema, fetch_account_schema, fetch_opportunity_schema,
+    handle_lead_trigger,
     )
 from apps.salesforce.lead import fetch_lead_data
 from apps.salesforce.user_ops import fetch_user_team_member, fetch_sf_users
@@ -36,8 +37,12 @@ app = Flask(__name__)
 @cross_origin()
 def ping():
     """checking DB connection """
-    conn = connect()
-    return json.dumps({"response": conn}) if isinstance(conn, str) else json.dumps({"response": "success"})
+    try:
+        conn = connect()
+        return json.dumps({"response": conn}) if isinstance(conn, str) else json.dumps({"response": "success"})
+    except:
+        print("DB connection failed, but server is still running!")
+        return json.dumps({"message": "pong", "status": 200, })
 
 
 @app.route(rule="/auth-url/", methods=["GET", ])
@@ -263,6 +268,13 @@ def sf_opportunity_schema():
     return fetch_opportunity_schema(request=request)
 
 
+
+@app.route(rule="/post/sf/trigger/lead/", methods=["POST", ])
+@cross_origin()
+def get_leads_from_sf():
+    """SF will call this API to send lead data here """
+    return handle_lead_trigger(request=request, )
+
 #########################################################################################
 #
 #   Salesforce end
@@ -303,6 +315,25 @@ def oauth_code():
 #
 #########################################################################################
 
+
+
+
+@app.route("/listen/", methods=["GET", "POST", ])
+@cross_origin(origins=["google", ])
+def listen_anything():
+    """testing SSO ACS listening """
+    print(f"{20*'-'}")
+    # print(request.args)
+    # print(request.data)
+    # print(request.pragma)
+    print(f"{20*'-'}")
+    return json.dumps({
+        "data": {
+            "params": f"{dict(request.args.items())}" or "",
+        },
+        "message": "listening! check the console",
+        "status": 200,
+    })
 
 
 
