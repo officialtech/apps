@@ -15,11 +15,17 @@ def contact_schema():
     })
 
 
-def fetch_sf_contact_schema(instance_url, access_id, ):
+def fetch_sf_contact_schema(instance_url, access_id, *args, **kwargs, ):
     """fetching sf schema for contact """
-    
-    sf = Salesforce(instance_url=instance_url, session_id=access_id)
-    schema = sf.Contact.describe()
+    try:
+        sf = Salesforce(instance_url=instance_url, session_id=access_id)
+        schema = sf.Contact.describe()
+    except Exception as ex:
+        print(ex)
+        from main_handler import regenerate_tokens
+        regenerate_tokens() # start work from here
+
+
     contact_picklist = []
     contact_schema_list = []
     try:

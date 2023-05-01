@@ -64,7 +64,7 @@ def code_handler(request):
     response["user_id"] = profile.get("id")
     response["email"] = profile.get("email")
     response["status"] = status
-    # save_creds(response)
+    save_creds(response)
     return response
     
 
@@ -72,7 +72,7 @@ def save_creds(creds):
     """save user credentials to db """
     conn = connect()
     cur = conn.cursor()
-    query = f"""INSERT INTO `user_data` (access_token, refresh_token, email, user_id) VALUES({creds.get('access_token')!r}, {creds.get('refresh_token')!r}, {creds.get('email')!r}, {creds.get('user_id')!r}) """
+    query = f"""INSERT INTO `company_integrations` (google, user_id) VALUES({creds.get('refresh_token')!r}, {creds.get('user_id')!r}) """
     print(query)
     cur.execute(query)
     conn.commit() # I don't know why but commit is required here!

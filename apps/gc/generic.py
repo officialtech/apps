@@ -39,5 +39,6 @@ def user_profile(access_token):
         "Authorization": f"Bearer {access_token}",
     }
     data = {}
+    
     response = requests.request(method="GET", url=USER_PROFILE, headers=header, data=data, timeout=10)
     return response.json()

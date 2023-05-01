@@ -15,7 +15,7 @@ from apps.slack.main_handler import get_access_token, get_conversation_list, sen
 from apps.salesforce.main_handler import (
     get_auth_url, get_oauth_tokens, get_schemas, fetch_user_details,
     fetch_contact_schema, fetch_lead_schema, fetch_account_schema, fetch_opportunity_schema,
-    handle_lead_trigger,
+    handle_lead_trigger, regenerate_tokens,
     )
 from apps.salesforce.lead import fetch_lead_data
 from apps.salesforce.user_ops import fetch_user_team_member, fetch_sf_users
@@ -39,10 +39,9 @@ def ping():
     """checking DB connection """
     try:
         conn = connect()
-        return json.dumps({"response": conn}) if isinstance(conn, str) else json.dumps({"response": "success"})
-    except:
-        print("DB connection failed, but server is still running!")
         return json.dumps({"message": "pong", "status": 200, })
+    except:
+        return json.dumps({"response": conn}) if isinstance(conn, str) else json.dumps({"response": "success"})
 
 
 @app.route(rule="/auth-url/", methods=["GET", ])
@@ -55,11 +54,13 @@ def auth_url():
         "url": AUTH_URL,
     })
 
+
 @app.route("/code/", methods=["GET", ])
 @cross_origin()
 def code():
     """saving authenticated tokens """
     return code_handler(request=request)
+
 
 @app.route("/insert/event/", methods=["POST", ])
 @cross_origin()
@@ -275,6 +276,15 @@ def get_leads_from_sf():
     """SF will call this API to send lead data here """
     return handle_lead_trigger(request=request, )
 
+
+@app.route(rule="/post/sf/tokens/")
+@cross_origin()
+def regenerate_token():
+    """regenerate access token using refresh token """
+    return regenerate_tokens(request=request, )
+
+
+
 #########################################################################################
 #
 #   Salesforce end
@@ -323,9 +333,10 @@ def oauth_code():
 def listen_anything():
     """testing SSO ACS listening """
     print(f"{20*'-'}")
-    # print(request.args)
-    # print(request.data)
-    # print(request.pragma)
+    print("args: ", request.args)
+    print("data: ", request.data)
+    print("pragma: ", request.pragma)
+    print("headers: ", request.headers)
     print(f"{20*'-'}")
     return json.dumps({
         "data": {

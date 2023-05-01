@@ -14,9 +14,24 @@ def connect(engine="mysql"):
 
 
 
-def save_profile():
+def save_profile(access_token, user_id, name, email, is_active, platform_id, ):
     """save user profile to DB """
-    pass
+
+
+    cnx = connect(engine="mysql")
+    cur = cnx.cursor()
+
+    query = read_file(file="apps/salesforce/sql/insert_profile", extention="sql")
+    query.format(
+        access_token=access_token, user_id=user_id,
+        name=name, email=email, is_active=is_active,
+        platform_id=platform_id,
+    )
+
+    cur.execute(query)
+    cnx.commit()
+    cnx.close()
+    return True
 
 
 def save_users_data(data, ):

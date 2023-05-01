@@ -39,6 +39,24 @@ def get_oauth_tokens(code: str):
     response = requests.request("POST", oauth_url, headers=headers, data=payload, timeout=10)
     print(response.text)
 
+    # saving data to DB
+    try:
+        access_token = response.json().get("access_token")
+        # for further details
+        _res = fetch_user_details(access_token=access_token, )
+        _response = json.loads(_res)
+        print(_response)
+
+        user_id = _response.get("data").get("user_id")
+        name = _response.get("data").get("name")
+        email = _response.get("data").get("email")
+        is_active = _response.get("data").get("active")
+
+        save_profile(access_token=access_token, user_id=user_id, name=name, email=email, is_active=is_active, platform_id=1)
+
+    except Exception as ex:
+        print("Exception while saving profile: ", ex)
+
     return response.json()
 
 
@@ -49,7 +67,6 @@ def get_schemas(schema):
     if schema == "contact":
         from apps.salesforce.contact import contact_schema
         return contact_schema()
-
 
     elif schema == "opportunity":
         from apps.salesforce.opportunity import oppertunity_schema
@@ -82,7 +99,7 @@ def fetch_user_details(access_token, ):
         timeout=10,
     )
 
-    # save user details to DB
+    # # save user details to DB
     save_profile()
 
     return json.dumps({
@@ -118,6 +135,34 @@ def fetch_opportunity_schema(request, ):
     _access_token = request.headers.get("access_token", "if empty")
     return fetch_sf_opportunity_schema(instance_url=_instance_url, access_id=_access_token)
 
+
+def regenerate_tokens(request=None, grant_type="refresh_token", refresh_token=None):
+    """regenrate access token using user data (refresh_token) """
+
+    url = "https://login.salesforce.com/services/oauth2/token"
+
+    if request:
+        grant_type = request.json.get("grant_type")
+        refresh_token = request.json.get("refresh_token")
+
+    payload = f"""
+        grant_type={grant_type}&
+        refresh_token={refresh_token}&
+        client_id={config("SALESFORCE_CONSUMER_KEY")}&
+        client_secret={config("SALESFORCE_CONSUMER_SECRET")}
+    """
+
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload, timeout=10)
+    print(response.text)
+    
+    return json.dumps({
+        "status": response.status_code,
+        "data": response.json(),
+    })
 
 
 ##############################################################################

@@ -9,7 +9,7 @@ config_setting = {
   'password': config('DB_PASSWORD'),
   'host': config('DB_HOST'),
   'database': config('DB_NAME'),
-  'port': 3306,
+  'port': config("DB_PORT", default=3306),
   'raise_on_warnings': True,
 }
 
@@ -17,6 +17,7 @@ def connect():
     """connect to DB """
     cnx = "check error for console"
     try:
+        print(config_setting)
         cnx = mysql.connector.connect(**config_setting)
         return cnx
     except mysql.connector.Error as err:

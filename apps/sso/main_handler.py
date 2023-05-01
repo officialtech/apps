@@ -20,7 +20,6 @@ def sso_code_handler(request):
         "redirect_uri": config('GOOGLE_SSO_REDIRECT_URL'),
         "grant_type": "authorization_code",
     }
-
     response, status = get_request_google(url=TOKEN_URL, payload=payload)
     profile = user_profile(access_token=response.get("access_token"))
     response["user_id"] = profile.get("id")
