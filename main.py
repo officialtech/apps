@@ -277,11 +277,11 @@ def get_leads_from_sf():
     return handle_lead_trigger(request=request, )
 
 
-@app.route(rule="/post/sf/tokens/")
+@app.route(rule="/post/sf/tokens/", methods=["POST", ])
 @cross_origin()
 def regenerate_token():
     """regenerate access token using refresh token """
-    return regenerate_tokens(request=request, )
+    return regenerate_tokens(_request=request, )
 
 
 

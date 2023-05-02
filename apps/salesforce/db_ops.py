@@ -46,3 +46,17 @@ def save_users_data(data, ):
     cnx.commit()
     cnx.close()
     return True
+
+
+def save_refresh_token(user_id, refresh_token):
+    """save user id and refresh token to DB """
+    cnx = connect(engine="mysql")
+    cur = cnx.cursor()
+
+    query = f"""INSERT INTO `company_integrations` (user_id, salesforce) VALUES ({user_id}, {refresh_token}) """
+    cur.execute(query)
+
+    cnx.commit()
+    cnx.close()
+
+    return True

@@ -6,6 +6,7 @@ from functools import reduce
 from apps.salesforce.constant import contact_schema_dict
 from simple_salesforce import Salesforce
 from utils.genric import change_case
+from apps.salesforce.db_ops import connect
 
 
 def contact_schema():
@@ -15,16 +16,25 @@ def contact_schema():
     })
 
 
-def fetch_sf_contact_schema(instance_url, access_id, *args, **kwargs, ):
+def fetch_sf_contact_schema(instance_url, access_id, user_id, *args, **kwargs, ):
     """fetching sf schema for contact """
     try:
         sf = Salesforce(instance_url=instance_url, session_id=access_id)
         schema = sf.Contact.describe()
     except Exception as ex:
         print(ex)
-        from main_handler import regenerate_tokens
-        regenerate_tokens() # start work from here
-
+        
+        cnx = connect(engine="mysql")
+        cur = cnx.cursor()
+        query = f"""SELECT salesforce from `company_integrations` WHERE user_id={user_id}"""
+        cur.execute(query)
+        salesforce_tuple = cur.fetchall()
+        if salesforce_tuple:
+            from main_handler import regenerate_tokens
+            _response = regenerate_tokens(salesforce_tuple[0][0]) # start work from here
+            access_id = _response.get("data").get("refresh_token")
+            sf = Salesforce(instance_url=instance_url, session_id=access_id)
+            schema = sf.Contact.describe()
 
     contact_picklist = []
     contact_schema_list = []

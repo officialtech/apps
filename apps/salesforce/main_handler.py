@@ -6,7 +6,7 @@ import requests
 from decouple import config
 
 from apps.salesforce.constant import PROFILE
-from apps.salesforce.db_ops import save_profile
+from apps.salesforce.db_ops import save_profile, save_refresh_token
 
 from apps.salesforce.contact import fetch_sf_contact_schema
 from apps.salesforce.lead import fetch_sf_lead_schema
@@ -42,6 +42,7 @@ def get_oauth_tokens(code: str):
     # saving data to DB
     try:
         access_token = response.json().get("access_token")
+        refresh_token = response.json().get("refresh_token")
         # for further details
         _res = fetch_user_details(access_token=access_token, )
         _response = json.loads(_res)
@@ -52,7 +53,8 @@ def get_oauth_tokens(code: str):
         email = _response.get("data").get("email")
         is_active = _response.get("data").get("active")
 
-        save_profile(access_token=access_token, user_id=user_id, name=name, email=email, is_active=is_active, platform_id=1)
+        # save_profile(access_token=access_token, user_id=user_id, name=name, email=email, is_active=is_active, platform_id=1)
+        save_refresh_token(user_id=user_id, refresh_token=refresh_token)
 
     except Exception as ex:
         print("Exception while saving profile: ", ex)
@@ -112,7 +114,8 @@ def fetch_contact_schema(request, ):
     """fetch schema of contact from SF """
     _instance_url = request.headers.get("instance_url", "if empty")
     _access_token = request.headers.get("access_token", "if empty")
-    return fetch_sf_contact_schema(instance_url=_instance_url, access_id=_access_token)
+    _user_id = request.headers.get("user_id", "if empty")
+    return fetch_sf_contact_schema(instance_url=_instance_url, access_id=_access_token, user_id=_user_id)
 
 
 def fetch_lead_schema(request, ):
@@ -136,14 +139,14 @@ def fetch_opportunity_schema(request, ):
     return fetch_sf_opportunity_schema(instance_url=_instance_url, access_id=_access_token)
 
 
-def regenerate_tokens(request=None, grant_type="refresh_token", refresh_token=None):
+def regenerate_tokens(_request=None, grant_type="refresh_token", refresh_token=None, ):
     """regenrate access token using user data (refresh_token) """
 
     url = "https://login.salesforce.com/services/oauth2/token"
-
-    if request:
-        grant_type = request.json.get("grant_type")
-        refresh_token = request.json.get("refresh_token")
+    import pdb; pdb.set_trace()
+    if _request:
+        grant_type = _request.json.get("grant_type")
+        refresh_token = _request.json.get("refresh_token")
 
     payload = f"""
         grant_type={grant_type}&
