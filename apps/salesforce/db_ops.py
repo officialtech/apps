@@ -48,15 +48,21 @@ def save_users_data(data, ):
     return True
 
 
-def save_refresh_token(user_id, refresh_token):
+def save_refresh_token(response_data):
     """save user id and refresh token to DB """
-    cnx = connect(engine="mysql")
-    cur = cnx.cursor()
+    try:
+        cnx = connect(engine="mysql")
+        cur = cnx.cursor()
 
-    query = f"""INSERT INTO `company_integrations` (user_id, salesforce) VALUES ({user_id}, {refresh_token}) """
-    cur.execute(query)
+        query = f"""INSERT INTO `company_integrations` (salesforce) VALUES ({response_data!r}) """
+        cur.execute(query)
 
-    cnx.commit()
-    cnx.close()
+        cnx.commit()
+        cnx.close()
 
-    return True
+        return True
+    
+    except Exception as ex:
+        print("Just check above query and change TABLE structure in your DB")
+        print(ex)
+        return

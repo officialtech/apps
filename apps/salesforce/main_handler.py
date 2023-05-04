@@ -54,9 +54,10 @@ def get_oauth_tokens(code: str):
         is_active = _response.get("data").get("active")
 
         # save_profile(access_token=access_token, user_id=user_id, name=name, email=email, is_active=is_active, platform_id=1)
-        save_refresh_token(user_id=user_id, refresh_token=refresh_token)
+        save_refresh_token(_response)
 
     except Exception as ex:
+        print("Heck! check DB table structure and set NULL not required field!")
         print("Exception while saving profile: ", ex)
 
     return response.json()
