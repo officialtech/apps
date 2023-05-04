@@ -70,14 +70,21 @@ def code_handler(request):
 
 def save_creds(creds):
     """save user credentials to db """
-    conn = connect()
-    cur = conn.cursor()
-    query = f"""INSERT INTO `company_integrations` (google, user_id) VALUES({creds.get('refresh_token')!r}, {creds.get('user_id')!r}) """
-    print(query)
-    cur.execute(query)
-    conn.commit() # I don't know why but commit is required here!
-    conn.close()
-    return True
+    try:
+        conn = connect()
+        cur = conn.cursor()
+        query = f"""INSERT INTO `company_integrations` google VALUES({creds!r}) """
+        print(query)
+        cur.execute(query)
+        conn.commit() # I don't know why but commit is required here!
+        conn.close()
+        return True
+    
+    except Exception as ex:
+        print(f"Please check your DB table structure and put not required fields NULL, \nI'm not able to save your details, so check first and come here again.")
+        print("See the above query for better understanding that what I'm trying to saving!")
+        return
+
 
 
 def insert_event_handler(request):

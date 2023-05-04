@@ -143,7 +143,7 @@ def regenerate_tokens(_request=None, grant_type="refresh_token", refresh_token=N
     """regenrate access token using user data (refresh_token) """
 
     url = "https://login.salesforce.com/services/oauth2/token"
-    import pdb; pdb.set_trace()
+
     if _request:
         grant_type = _request.json.get("grant_type")
         refresh_token = _request.json.get("refresh_token")
