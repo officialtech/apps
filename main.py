@@ -22,6 +22,13 @@ from apps.salesforce.user_ops import fetch_user_team_member, fetch_sf_users
 
 # SSO
 from apps.sso.main_handler import SSO_AUTH_URL, sso_code_handler
+# MSC
+from apps.msc.constant import MSC_oAUTH_URL
+
+#Zoom
+from apps.zoom.constant import ZOOM_oAUTH_URL
+from apps.zoom.zoom_main import fetch_token
+
 
 
 app = Flask(__name__)
@@ -324,6 +331,73 @@ def oauth_code():
 #   Google SSO end
 #
 #########################################################################################
+
+
+
+#########################################################################################
+#
+#   Microsoft calander start
+#
+#########################################################################################
+
+
+@app.route(rule="/get/msc/auth/url/")
+@cross_origin()
+def msc_oauth_url():
+    return json.dumps({
+        "status": 200,
+        "data": [
+            MSC_oAUTH_URL,
+        ],
+        "message": "success",
+    })
+
+
+#########################################################################################
+#
+#   Microsoft calander end
+#
+#########################################################################################
+
+
+
+
+
+#########################################################################################
+#
+#   Zoom start
+#
+#########################################################################################
+
+
+
+@app.route(rule="/get/zoom/auth/url/")
+@cross_origin()
+def zoom_oauth_url():
+    return json.dumps({
+        "status": 200,
+        "data": [
+            ZOOM_oAUTH_URL,
+        ],
+        "message": "success",
+    })
+
+
+@app.route(rule="/get/zoom/auth/token/")
+@cross_origin()
+def zoom_token():
+    return fetch_token(request=request, )
+
+
+
+#########################################################################################
+#
+#   Zoom end
+#
+#########################################################################################
+
+
+
 
 
 
